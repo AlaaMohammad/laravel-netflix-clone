@@ -18,12 +18,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
+});
+
+Route::group(['prefix' =>'/admin','middleware' =>['auth','admin']],function(){
+    Route::resource('movies',MovieController::class);
+    Route::resource('categories', CategoryController::class);
 });
 
 
-Route::resource('movies',MovieController::class);
-Route::resource('categories', CategoryController::class);
+
 Route::get('/contact-us', [PageController::class,'contactUs']);
 //Route::get('/about-us', PageController::class);
 

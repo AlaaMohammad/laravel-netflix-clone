@@ -18,12 +18,8 @@
         </div>
         @foreach($categories as $category)
             <div class="form-check">
-                {{dd($movie->$categories)}}
                 <input name="categories[]" class="form-check-input" type="checkbox" value="{{$category->id}}"
-                       id="flexCheckDefault"
-                       @foreach($movie->categories as $value)
-                           @if($category->id == $value) checked @endif >
-                        @endforeach
+                       id="flexCheckDefault" {{ $movie_categories->contains($category->id) ? 'checked' : ''}}   >
                 <label class="form-check-label" for="flexCheckDefault">
                     {{$category->category}}
                 </label>

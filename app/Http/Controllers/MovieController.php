@@ -65,6 +65,7 @@ class MovieController extends Controller
     public function show(Movie $movie)
     {
         //
+
     }
 
     /**
@@ -77,8 +78,9 @@ class MovieController extends Controller
     {
         //
         $categories = Category::all();
-        
-        return view('movies.edit', compact('categories','movie'));
+        $movie_categories = $movie->categories()->pluck('category_id');
+        //dd($movie_categories);
+        return view('movies.edit', compact('categories','movie','movie_categories'));
     }
 
     /**
@@ -91,6 +93,7 @@ class MovieController extends Controller
     public function update(Request $request, Movie $movie)
     {
         //
+        //dd($request);
         $request->validate([
             'movie' =>'required'
         ]);
@@ -100,10 +103,10 @@ class MovieController extends Controller
             'description' =>$request->description
         ]);
 
-        //dd($request->categories);
-        $movie->categories()->attach($request->categories);
 
-        dd($movie);
+        $movie->categories()->sync($request->categories);
+
+        return redirect()->back();
     }
 
     /**
@@ -115,5 +118,9 @@ class MovieController extends Controller
     public function destroy(Movie $movie)
     {
         //
+        $movie->deleteOrFail();
+        $movie_categories = $movie->categories()->pluck('category_id');
+        //$movie->categories()->detach($movie_categories);
+        $movie->categories()->sync($movie_categories);
     }
 }
